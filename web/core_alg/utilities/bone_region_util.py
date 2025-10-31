@@ -8,6 +8,12 @@ def get_left_region(alpha_shape):
     left_box = Polygon([(minx, miny), (minx, maxy), (minx / 1.5, maxy), (minx / 1.5, miny)])
     left_region = alpha_shape.intersection(left_box)
 
+    # Fix for intersection returning MultiPolygon
+    if left_region.geom_type == 'MultiPolygon':
+        left_region = max(left_region.geoms, key=lambda p: p.area)
+    elif left_region.geom_type != 'Polygon':
+        raise ValueError(f"Unexpected geometry type from intersection: {left_region.geom_type}")
+
     left_region_line = left_region.exterior
     left_region_points = []
     for x, y in left_region_line.coords:
@@ -41,6 +47,12 @@ def get_right_region(alpha_shape):
     right_box = Polygon([(maxx / 1.5, miny), (maxx / 1.5, maxy), (maxx, maxy), (maxx, miny)])
     right_region = alpha_shape.intersection(right_box)
 
+    # Fix for intersection returning MultiPolygon
+    if right_region.geom_type == 'MultiPolygon':
+        right_region = max(right_region.geoms, key=lambda p: p.area)
+    elif right_region.geom_type != 'Polygon':
+        raise ValueError(f"Unexpected geometry type from intersection: {right_region.geom_type}")
+
     right_region_line = right_region.exterior
     right_region_points = []
     for x, y in right_region_line.coords:
@@ -71,6 +83,12 @@ def get_center_region(alpha_shape):
     # todo: coefficient
     center_box = Polygon([(minx / 4, miny), (minx / 4, maxy), (maxx / 4, maxy), (maxx / 4, miny)])
     center_bone = alpha_shape.intersection(center_box)
+
+    # Fix for intersection returning MultiPolygon
+    if center_bone.geom_type == 'MultiPolygon':
+        center_bone = max(center_bone.geoms, key=lambda p: p.area)
+    elif center_bone.geom_type != 'Polygon':
+        raise ValueError(f"Unexpected geometry type from intersection: {center_bone.geom_type}")
 
     center_bone_line = center_bone.exterior
     center_bone_points = []

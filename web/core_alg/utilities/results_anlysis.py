@@ -14,7 +14,7 @@ from core_alg.base import Bone
 
 # default directory path
 _out_root_dir = Path(os.path.dirname(os.path.abspath(__file__)))
-_user_result_dir = os.path.join(_out_root_dir, '../../out', 'core_alg', 'results')
+_user_result_dir = os.path.join(_out_root_dir, "../../out", "core_alg", "results")
 
 fbml = 439.2
 feb = 81.2
@@ -57,33 +57,47 @@ def analysis_help(bone_type, input_array, number_bone, number_measurements):
         for j in range(number_bone):
             if bone_type == Bone.Type.FEMUR:
                 abs_errors.append(abs(input_array[j][i] - femur_true_values[i]))
-                scale_errors.append(abs(input_array[j][i] - femur_true_values[i]) / femur_true_values[i])
+                scale_errors.append(
+                    abs(input_array[j][i] - femur_true_values[i]) / femur_true_values[i]
+                )
             elif bone_type == Bone.Type.TIBIA:
                 abs_errors.append(abs(input_array[j][i] - tibia_true_values[i]))
-                scale_errors.append(abs(input_array[j][i] - tibia_true_values[i]) / tibia_true_values[i])
+                scale_errors.append(
+                    abs(input_array[j][i] - tibia_true_values[i]) / tibia_true_values[i]
+                )
             elif bone_type == Bone.Type.HUMERUS:
                 abs_errors.append(abs(input_array[j][i] - humerus_true_values[i]))
-                scale_errors.append(abs(input_array[j][i] - humerus_true_values[i]) / humerus_true_values[i])
+                scale_errors.append(
+                    abs(input_array[j][i] - humerus_true_values[i])
+                    / humerus_true_values[i]
+                )
             else:
                 abs_errors.append(abs(input_array[j][i] - radius_true_values[i]))
-                scale_errors.append(abs(input_array[j][i] - radius_true_values[i]) / radius_true_values[i])
+                scale_errors.append(
+                    abs(input_array[j][i] - radius_true_values[i])
+                    / radius_true_values[i]
+                )
 
         abs_errors_mean = sum(abs_errors) / len(abs_errors)
-        abs_variance = sum([((x - abs_errors_mean) ** 2) for x in abs_errors]) / len(abs_errors)
-        abs_stdev = abs_variance ** 0.5
+        abs_variance = sum([((x - abs_errors_mean) ** 2) for x in abs_errors]) / len(
+            abs_errors
+        )
+        abs_stdev = abs_variance**0.5
         abs_avg_res.append(abs_errors_mean)
         abs_std_res.append(abs_stdev)
 
         sca_errors_mean = sum(scale_errors) / len(scale_errors)
-        sca_variance = sum([((x - sca_errors_mean) ** 2) for x in scale_errors]) / len(scale_errors)
-        sca_stdev = sca_variance ** 0.5
+        sca_variance = sum([((x - sca_errors_mean) ** 2) for x in scale_errors]) / len(
+            scale_errors
+        )
+        sca_stdev = sca_variance**0.5
         scale_avg_res.append(sca_errors_mean)
         scale_std_res.append(sca_stdev)
 
     return abs_avg_res, abs_std_res, scale_avg_res, scale_std_res
 
 
-def analysis_csv(name='2020-11-01-16-58-16-tibia.csv', bone_type=Bone.Type.TIBIA):
+def analysis_csv(name="2020-11-01-16-58-16-tibia.csv", bone_type=Bone.Type.TIBIA):
     df = read_file(name)
     two_d_array = df.to_numpy()
 
@@ -93,7 +107,9 @@ def analysis_csv(name='2020-11-01-16-58-16-tibia.csv', bone_type=Bone.Type.TIBIA
     number_measurements = two_d_array.shape[1]
 
     # analysis
-    abs_avg_res, abs_std_res, scale_avg_res, scale_std_res = analysis_help(bone_type, two_d_array, number_bone, number_measurements)
+    abs_avg_res, abs_std_res, scale_avg_res, scale_std_res = analysis_help(
+        bone_type, two_d_array, number_bone, number_measurements
+    )
 
     # append result to dataframe
     to_append = abs_avg_res

@@ -2,6 +2,11 @@
 #data
 #data
 
+*.xlsx
+*.docx
+*.pdf
+*.typ
+
 #output
 */out/*
 #out
@@ -237,5 +242,7 @@ GitHub.sublime-settings
 data/*
 !data/iphone_ten
 !data/structure_sensor
+!data/starbucks_cup
+!data/bones_combined
 
 uv.lock

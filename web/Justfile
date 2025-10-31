@@ -1,0 +1,5 @@
+scan:
+    uv run ./test_scan.py
+
+picture:
+    uv run ./test_picture.py

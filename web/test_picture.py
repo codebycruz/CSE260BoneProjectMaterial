@@ -19,26 +19,35 @@ from core_alg.utilities import results_anlysis
 _out_root_dir = Path(os.path.dirname(os.path.abspath(__file__)))
 _root_dir = _out_root_dir.parent
 # user log directory
-_user_logs_file = os.path.join(
-    _out_root_dir, 'out', 'core_alg', 'logs', 'logs.txt')
-_user_result_dir = os.path.join(_out_root_dir, 'out', 'core_alg', 'results')
+_user_logs_file = os.path.join(_out_root_dir, "out", "core_alg", "logs", "logs.txt")
+_user_result_dir = os.path.join(_out_root_dir, "out", "core_alg", "results")
 # process more files
-multi_files = True
-index_default = 4
+multi_files = False
+index_default = 0
 # switch for figure
 show_figure = False
 bone_type = Bone.Type.FEMUR
-device: Literal["bones obj files", "iphone_ten", "structure_sensor", "cubic box obj files"] = "structure_sensor"
+device: Literal[
+    "bones obj files", "iphone_ten", "structure_sensor", "cubic box obj files", "bones_combined"
+] = "bones_combined"
+
 
 def load_file(index=index_default):
     bone_type_str = bone_type.name.lower()
 
-    obj_dir = os.path.join(_root_dir, 'data', device, 'picture', bone_type_str,
-                           '{}_one_{}.obj'.format(bone_type_str, str(index)))
+    obj_dir = os.path.join(
+        _root_dir,
+        "data",
+        device,
+        "picture",
+        bone_type_str,
+        "{}_one_{}.obj".format(bone_type_str, str(index)),
+    )
 
-    logging.info('Loading {0} dataset from {1}'.format(bone_type_str, obj_dir))
+    logging.info("Loading {0} dataset from {1}".format(bone_type_str, obj_dir))
     scan_obj = pywavefront.Wavefront(
-        obj_dir, strict=True, encoding="iso-8859-1", parse=True)
+        obj_dir, strict=True, encoding="iso-8859-1", parse=True
+    )
 
     # Scale unit length to 1 mm(coordinate 1000x)
     vertices = np.asarray(scan_obj.vertices) * 1000
@@ -66,8 +75,7 @@ def process(picture_pcd):
         bone = Bone.Tibia()
 
     # 2. 3D model pre-processing
-    alpha_shape = image_process.preprocess_bone(
-        picture_pcd, bone_type, show_figure)
+    alpha_shape = image_process.preprocess_bone(picture_pcd, bone_type, show_figure)
     bone.set_alpha_shape(alpha_shape)
 
     # 3 Measurements
@@ -96,6 +104,8 @@ if __name__ == "__main__":
         logging.info("writing results to csv file in output folder...")
         filename = csv_out_utils.csv_out(bones, bone_type, _user_result_dir)
 
-        logging.info("analysing the results for multi-bones, last four rows are: "
-                     "abs_avg_res, abs_std_res, scale_avg_res, scale_std_res")
+        logging.info(
+            "analysing the results for multi-bones, last four rows are: "
+            "abs_avg_res, abs_std_res, scale_avg_res, scale_std_res"
+        )
         results_anlysis.analysis_csv(filename, bone_type)

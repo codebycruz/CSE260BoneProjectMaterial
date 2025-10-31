@@ -24,11 +24,11 @@ _user_logs_file = os.path.join(
 _user_result_dir = os.path.join(_out_root_dir, 'out', 'core_alg', 'results')
 # process more files
 multi_files = False
-index_default = 0
+index_default = 1
 # switch for figure
-show_figure = True
-bone_type = Bone.Type.RADIUS
-device: Literal["bones obj files", "iphone_ten", "structure_sensor", "cubic box obj files"] = "bones obj files"
+show_figure = False
+bone_type = Bone.Type.FEMUR
+device: Literal["bones obj files", "iphone_ten", "structure_sensor", "cubic box obj files", "bones_combined", "starbucks_cup"] = "starbucks_cup"
 
 
 def load_file(index=index_default):
