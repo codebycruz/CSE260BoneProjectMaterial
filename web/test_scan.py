@@ -1,6 +1,7 @@
 # python libraries
 import logging
 import os
+from typing import Literal
 import open3d as o3d
 import pywavefront
 import numpy as np
@@ -27,16 +28,11 @@ index_default = 0
 # switch for figure
 show_figure = True
 bone_type = Bone.Type.RADIUS
-# switch for structure sensor or iphone10
-structure_sensor = True
+device: Literal["bones obj files", "iphone_ten", "structure_sensor", "cubic box obj files"] = "bones obj files"
 
 
 def load_file(index=index_default):
     bone_type_str = bone_type.name.lower()
-    if structure_sensor:
-        device = 'structure_sensor'
-    else:
-        device = 'iphone_ten'
     obj_dir = os.path.join(_root_dir, 'data', device, 'scan', bone_type_str,
                            '{}_{}.obj'.format(bone_type_str, str(index)))
 
@@ -47,7 +43,7 @@ def load_file(index=index_default):
     # Scale unit length to 1 mm(coordinate 1000x)
     vertices = np.asarray(scan_obj.vertices) * 1000
 
-    if not structure_sensor:
+    if device == "iphone_ten":
         # iphone_ten image has color info on "v" line
         vertices = vertices[:, :3]
 

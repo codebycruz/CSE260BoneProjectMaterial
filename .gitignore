@@ -234,4 +234,8 @@ Control.ca-bundle
 Control.system-ca-bundle
 GitHub.sublime-settings
 
+data/*
+!data/iphone_ten
+!data/structure_sensor
+
 uv.lock
